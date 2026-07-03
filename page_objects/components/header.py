@@ -11,11 +11,11 @@ class Header:
     
   @property
   def shopping_cart(self):
-    return self.page.locator(".shopping_cart_link")
+    return self.page.get_by_test_id("shopping-cart-link")
   
   @property
   def shopping_cart_badge(self):
-    return self.page.locator(".shopping_cart_badge")
+    return self.page.get_by_test_id("shopping-cart-badge")
   
   @property
   def menu_button(self):
@@ -23,7 +23,7 @@ class Header:
   
   @property
   def sorting_dropdown(self):
-    return self.page.locator(".product_sort_container")
+    return self.page.get_by_test_id("product-sort-container")
   
   def open_shopping_cart(self):
     self.shopping_cart.click()

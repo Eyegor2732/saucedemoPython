@@ -5,7 +5,7 @@ class CartPage(BasePage):
         super().__init__(page)
 
     def navigate(self):
-        super().navigate("https://www.saucedemo.com/cart.html")
+        super().navigate("/cart.html")
 
     @property
     def cart_items(self):

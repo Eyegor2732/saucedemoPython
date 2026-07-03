@@ -6,21 +6,33 @@ class LoginPage(BasePage):
         self.page = page
 
     def navigate(self):
-        super().navigate("https://www.saucedemo.com/")
+        super().navigate("/")
 
     @property
     def login_credentials_container(self):
-        return self.page.locator("#login_credentials")
+        return self.page.get_by_test_id("login-credentials")
     
     @property
     def login_passwords_container(self):
-        return self.page.locator(".login_password")
+        return self.page.get_by_test_id("login-password")
     
     @property
     def error_message_container(self):
         return self.page.locator(".error-message-container")
-
+    
+    @property
+    def username_input(self):
+        return self.page.get_by_placeholder("Username")
+    
+    @property
+    def password_input(self):
+        return self.page.get_by_placeholder("Password")
+    
+    @property
+    def login_button(self):
+        return self.page.get_by_role("button", name="Login")
+    
     def login(self, username, password):
-        self.page.get_by_placeholder("Username").fill(username)
-        self.page.get_by_placeholder("Password").fill(password)
-        self.page.get_by_role("button", name="Login").click()
+        self.username_input.fill(username)
+        self.password_input.fill(password)
+        self.login_button.click()

@@ -62,7 +62,7 @@ def test_logout_should_clean_cookies(inventory_page, login_page):
     cookies_before = inventory_page.page.context.cookies()
     assert cookies_before, "No cookies found before logout"
     inventory_page.header.open_menu()
-    inventory_page.menu.logout_button.click()
+    inventory_page.menu.logout()
     expect(inventory_page.page).to_have_url("https://www.saucedemo.com/")
     expect(login_page.login_credentials_container).to_be_visible()
     cookies_after = inventory_page.page.context.cookies()
@@ -70,5 +70,5 @@ def test_logout_should_clean_cookies(inventory_page, login_page):
 
 def test_about_should_open_saucelabs_website(inventory_page):
     inventory_page.header.open_menu()
-    inventory_page.menu.about_button.click()
+    inventory_page.menu.navigate_to_about()
     expect(inventory_page.page).to_have_url(re.compile(r"saucelabs\.com"))

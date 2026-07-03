@@ -1,6 +1,6 @@
 from pathlib import Path
 import sys
-from playwright.sync_api import expect
+from playwright.sync_api import expect, Playwright
 import pytest
 
 from page_objects.pages.login_page import LoginPage
@@ -31,6 +31,11 @@ def setup_auth(request, playwright):
 
     context.close()
     browser.close()
+
+@pytest.fixture(scope="session", autouse=True)
+def set_custom_test_id(playwright: Playwright):
+    # Change 'data-testid' to your preferred custom attribute
+    playwright.selectors.set_test_id_attribute("data-test")
 
 @pytest.fixture(scope="class")
 def browser_instance(playwright, request):

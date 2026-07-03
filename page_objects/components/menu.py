@@ -24,3 +24,18 @@ class Menu:
   @property
   def close_menu_button(self):
     return self.page.get_by_role("button", name="Close Menu")
+    
+  def close_menu(self):
+    self.close_menu_button.click()
+
+  def logout(self):
+    self.logout_button.click()
+  
+  def navigate_to_all_items(self):
+    self.all_items_button.click()
+
+  def reset_app_state(self):
+    self.reset_app_state_button.click()
+
+  def navigate_to_about(self):
+    self.about_button.click()

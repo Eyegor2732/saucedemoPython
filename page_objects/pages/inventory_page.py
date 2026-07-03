@@ -8,28 +8,25 @@ class InventoryPage(BasePage):
         super().__init__(page)
 
     def get_inventory_items(self):
-        return self.page.locator(".inventory_item")
+        return self.page.get_by_test_id("inventory-item")
     
     def get_remove_buttons(self):
         return(self.page.get_by_role("button", name="Remove"))
 
     def navigate(self):
-        super().navigate("https://www.saucedemo.com/inventory.html")
-    
-    def get_inventory_items(self):
-        return self.page.locator(".inventory_item")
+        super().navigate("/inventory.html")
     
     def sort_inventory(self, sort_option):
-        self.page.select_option(".product_sort_container", sort_option)
+        self.header.sorting_dropdown.select_option(sort_option)
 
     def get_item_name_by_index(self, index):
-        return self.get_inventory_items().nth(index).locator(".inventory_item_name").inner_text()
+        return self.get_inventory_items().nth(index).get_by_test_id("inventory-item-name").inner_text()
     
     def get_item_price_by_index(self, index):
-        return self.get_inventory_items().nth(index).locator(".inventory_item_price").inner_text()
+        return self.get_inventory_items().nth(index).get_by_test_id("inventory-item-price").inner_text()
     
     def get_item_description_by_index(self, index):
-        return self.get_inventory_items().nth(index).locator(".inventory_item_desc").inner_text()
+        return self.get_inventory_items().nth(index).get_by_test_id("inventory-item-desc").inner_text()
 
     def sort_and_verify_inventory(self, sort_option, by_name, is_ascending):
         item_count = self.get_inventory_items().count()
@@ -99,6 +96,3 @@ class InventoryPage(BasePage):
         remove_buttons = self.get_remove_buttons()
         while remove_buttons.count() > 0:
             remove_buttons.first.click()
-
-    def navigate_to_shopping_cart(self):
-        self.page.locator(".shopping_cart_link").click()
