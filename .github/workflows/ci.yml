@@ -1,0 +1,29 @@
+name: Python Playwright CI
+
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest playwright pytest-playwright
+
+      - name: Install Playwright Chromium only
+        run: python -m playwright install --with-deps chromium
+
+      - name: Run tests (headless Chrome)
+        run: pytest -o addopts='' --browser_name chrome_headless

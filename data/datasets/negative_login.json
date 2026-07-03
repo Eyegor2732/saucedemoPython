@@ -1,0 +1,59 @@
+{
+  "negative_login": [
+    {
+      "username": "invalid_user",
+      "password": "secret_sauce",
+      "message": "Username and password do not match any user in this service"
+    },
+    {
+      "username": "standard_user",
+      "password": "invalid_password",
+      "message": "Username and password do not match any user in this service"
+    },
+    {
+      "username": "invalid_user",
+      "password": "invalid_password",
+      "message": "Username and password do not match any user in this service"
+    },
+    {
+      "username": "   standard_user",
+      "password": "secret_sauce",
+      "message": "Username and password do not match any user in this service"
+    },
+    {
+      "username": "standard_user  ",
+      "password": "secret_sauce",
+      "message": "Username and password do not match any user in this service"
+    },
+    {
+      "username": "standard_user",
+      "password": "   secret_sauce",
+      "message": "Username and password do not match any user in this service"
+    },
+    {
+      "username": "standard_user",
+      "password": "secret_sauce  ",
+      "message": "Username and password do not match any user in this service"
+    },
+    {
+      "username": "",
+      "password": "secret_sauce",
+      "message": "Username is required"
+    },
+    {
+      "username": "standard_user",
+      "password": "",
+      "message": "Password is required"
+    },
+    {
+      "username": "",
+      "password": "",
+      "message": "Username is required"
+    },
+    {
+      "username": "locked_out_user",
+      "password": "secret_sauce",
+      "message": "Sorry, this user has been locked out."
+    }
+  ]
+}

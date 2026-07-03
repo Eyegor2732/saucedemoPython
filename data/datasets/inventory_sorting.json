@@ -1,0 +1,24 @@
+{
+  "inventory_sorting": [
+    {
+      "select": "az",
+      "isNameSort": true,
+      "isAscending": true
+    },
+    {
+      "select": "za",
+      "isNameSort": true,
+      "isAscending": false
+    },
+    {
+      "select": "lohi",
+      "isNameSort": false,
+      "isAscending": true
+    },
+    {
+      "select": "hilo",
+      "isNameSort": false,
+      "isAscending": false
+    }
+  ]
+}
