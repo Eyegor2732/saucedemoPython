@@ -1,5 +1,6 @@
 from pathlib import Path
 import sys
+from playwright.sync_api import expect
 import pytest
 
 from page_objects.pages.login_page import LoginPage
@@ -81,5 +82,13 @@ def cart_page(browser_instance):
 @pytest.fixture()
 def setup_inventory_test(inventory_page):
     inventory_page.navigate()
+    expect(inventory_page.header.get_page_title()).to_contain_text("Products")
     yield
     inventory_page.remove_all_items_from_cart()
+
+@pytest.fixture()
+def setup_cart_test(cart_page):
+    cart_page.navigate()
+    expect(cart_page.header.get_page_title()).to_contain_text("Your Cart")
+    # yield
+    # cart_page.remove_all_items_from_cart()

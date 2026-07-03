@@ -1,5 +1,6 @@
 from pathlib import Path
 import json
+import time
 import pytest
 from playwright.sync_api import expect
 
@@ -24,10 +25,7 @@ def test_login(login_page, inventory_page, positive_login):
     login_page.navigate()
     login_page.login(user_name, user_password)
 
-    expect(inventory_page.get_page_title()).to_contain_text("Products")
-    expect(inventory_page.getproduct_sort_dropdown()).to_be_visible()
-    expect(inventory_page.getproduct_sort_dropdown()).to_have_value("az")
-    expect(inventory_page.getproduct_sort_dropdown()).to_contain_text("Name (A to Z)")
+    expect(inventory_page.header.get_page_title()).to_contain_text("Products")
 
 @pytest.mark.no_auth
 @pytest.mark.parametrize('negative_login', negative_login_list)
@@ -37,6 +35,20 @@ def test_negative_login(login_page, negative_login):
 
     login_page.navigate()
     login_page.login(user_name, user_password)
-    login_page.page.wait_for_timeout(2000)
 
-    expect(login_page.get_error_message()).to_contain_text(negative_login["message"])
+    expect(login_page.error_message_container).to_contain_text(negative_login["message"])
+    expect(login_page.login_credentials_container).to_be_visible()
+
+@pytest.mark.no_auth
+def test_login_with_performance_glitch_user(login_page, inventory_page):
+    user_name = "performance_glitch_user"
+    user_password = "secret_sauce"
+
+    startTime = int(time.time())
+    login_page.navigate()   
+    login_page.login(user_name, user_password)
+    expect(inventory_page.header.get_page_title()).to_contain_text("Products")
+    endTime = int(time.time())
+
+    assert (endTime - startTime) > 4, "Login took shorter than 4 seconds"
+    

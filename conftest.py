@@ -3,5 +3,5 @@ def pytest_addoption(parser):
         "--browser_name", action="store", default="chrome", help="browser selection"
     )
     parser.addoption(
-        "--url_name", action="store", default="https://rahulshettyacademy.com/client", help="server selection"
+        "--url_name", action="store", default="https://www.saucedemo.com", help="server selection"
     )

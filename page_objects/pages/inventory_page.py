@@ -1,9 +1,11 @@
+from page_objects.base_page import BasePage
+
 from utils.common_methods import parse_currency_string_to_float
 import locale
 
-class InventoryPage:
+class InventoryPage(BasePage):
     def __init__(self, page):
-        self.page = page
+        super().__init__(page)
 
     def get_inventory_items(self):
         return self.page.locator(".inventory_item")
@@ -12,13 +14,7 @@ class InventoryPage:
         return(self.page.get_by_role("button", name="Remove"))
 
     def navigate(self):
-        self.page.goto("https://www.saucedemo.com/inventory.html")
-
-    def get_page_title(self):
-        return self.page.locator(".title")
-    
-    def getproduct_sort_dropdown(self):
-        return self.page.locator(".product_sort_container")
+        super().navigate("https://www.saucedemo.com/inventory.html")
     
     def get_inventory_items(self):
         return self.page.locator(".inventory_item")
