@@ -1,0 +1,28 @@
+{
+  "negative_checkout": [
+    {
+      "first_name": "",
+      "last_name": "",
+      "postal_code": "",
+      "error_message": "Error: First Name is required"
+    },
+    {
+      "first_name": "",
+      "last_name": "L",
+      "postal_code": "1",
+      "error_message": "Error: First Name is required"
+    },
+    {
+      "first_name": "F",
+      "last_name": "",
+      "postal_code": "1",
+      "error_message": "Error: Last Name is required"
+    },
+    {
+      "first_name": "F",
+      "last_name": "L",
+      "postal_code": "",
+      "error_message": "Error: Postal Code is required"
+    }
+  ]
+}

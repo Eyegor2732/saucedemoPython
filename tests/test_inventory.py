@@ -19,7 +19,7 @@ def test_inventory_page_basic(inventory_page):
     expect(inventory_page.header.sorting_dropdown).to_be_visible()
     expect(inventory_page.header.sorting_dropdown).to_have_value("az")
     expect(inventory_page.header.sorting_dropdown).to_contain_text("Name (A to Z)")
-    expect(inventory_page.get_inventory_items()).to_have_count(6)
+    expect(inventory_page.get_inventory_items).to_have_count(6)
 
 @pytest.mark.parametrize('inventory_sorting', inventory_sorting_list)
 def test_inventory_sorting(inventory_page, inventory_sorting):

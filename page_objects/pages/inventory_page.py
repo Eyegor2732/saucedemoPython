@@ -7,12 +7,18 @@ class InventoryPage(BasePage):
     def __init__(self, page):
         super().__init__(page)
 
+    @property
     def get_inventory_items(self):
         return self.page.get_by_test_id("inventory-item")
     
+    @property
     def get_remove_buttons(self):
         return(self.page.get_by_role("button", name="Remove"))
-
+    
+    @property
+    def get_add_to_cart_buttons(self):
+        return self.page.get_by_role("button", name="Add to cart")
+    
     def navigate(self):
         super().navigate("/inventory.html")
     
@@ -20,16 +26,16 @@ class InventoryPage(BasePage):
         self.header.sorting_dropdown.select_option(sort_option)
 
     def get_item_name_by_index(self, index):
-        return self.get_inventory_items().nth(index).get_by_test_id("inventory-item-name").inner_text()
+        return self.get_inventory_items.nth(index).get_by_test_id("inventory-item-name").inner_text()
     
     def get_item_price_by_index(self, index):
-        return self.get_inventory_items().nth(index).get_by_test_id("inventory-item-price").inner_text()
+        return self.get_inventory_items.nth(index).get_by_test_id("inventory-item-price").inner_text()
     
     def get_item_description_by_index(self, index):
-        return self.get_inventory_items().nth(index).get_by_test_id("inventory-item-desc").inner_text()
+        return self.get_inventory_items.nth(index).get_by_test_id("inventory-item-desc").inner_text()
 
     def sort_and_verify_inventory(self, sort_option, by_name, is_ascending):
-        item_count = self.get_inventory_items().count()
+        item_count = self.get_inventory_items.count()
         if item_count < 2:
             return
 
@@ -68,7 +74,7 @@ class InventoryPage(BasePage):
                 
     def get_dict_name_description(self) -> dict[str, str]:
         name_description_dict: dict[str, str] = {}
-        item_count = self.get_inventory_items().count()
+        item_count = self.get_inventory_items.count()
 
         for i in range(item_count):
             name = self.get_item_name_by_index(i)
@@ -81,7 +87,7 @@ class InventoryPage(BasePage):
     
     def get_dict_name_price(self) -> dict[str, str]:
         name_price_dict: dict[str, str] = {}
-        item_count = self.get_inventory_items().count()
+        item_count = self.get_inventory_items.count()
 
         for i in range(item_count):
             name = self.get_item_name_by_index(i)
@@ -93,6 +99,12 @@ class InventoryPage(BasePage):
         return name_price_dict
     
     def remove_all_items_from_cart(self):
-        remove_buttons = self.get_remove_buttons()
+        remove_buttons = self.get_remove_buttons
         while remove_buttons.count() > 0:
             remove_buttons.first.click()
+
+    def add_item_to_cart_by_index(self, index):
+        items = self.get_inventory_items
+        if index < 0 or index >= items.count():
+            raise IndexError(f"Index {index} is out of range for inventory items.")
+        items.nth(index).get_by_role("button", name="Add to cart").click()  

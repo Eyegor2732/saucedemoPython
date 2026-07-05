@@ -48,3 +48,15 @@ class CartPage(BasePage):
         count = self.remove_buttons.count()
         for _ in range(count):
             self.remove_buttons.first.click()
+
+    def get_cart_item_name_by_index(self, index):
+        return self.cart_item_names.nth(index).inner_text()
+
+    def get_cart_item_price_by_index(self, index):
+        return self.cart_item_prices.nth(index).inner_text()
+    
+    def get_cart_item_description_by_index(self, index):
+        return self.cart_item_descriptions.nth(index).inner_text()
+
+    def is_cart_empty(self):
+        return self.get_cart_items_count() == 0

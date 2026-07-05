@@ -26,4 +26,5 @@ jobs:
         run: python -m playwright install --with-deps chromium
 
       - name: Run tests (headless Chrome)
-        run: pytest -o addopts='' --browser_name chrome_headless
+        run: |
+          pytest -n auto -o addopts='' --browser_name chrome_headless

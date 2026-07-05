@@ -1,11 +1,12 @@
 from pathlib import Path
 import sys
-from playwright.sync_api import expect, Playwright
+from playwright.sync_api import Page, expect, Playwright
 import pytest
 
 from page_objects.pages.login_page import LoginPage
 from page_objects.pages.inventory_page import InventoryPage
 from page_objects.pages.cart_page import CartPage
+from page_objects.pages.checkout_one_page import CheckoutOnePage
 from utils.common_methods import create_saucedemo_session_cookie
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -85,15 +86,67 @@ def cart_page(browser_instance):
     return page
 
 @pytest.fixture()
+def checkout_one_page(browser_instance):
+    page = CheckoutOnePage(browser_instance)
+    return page
+
+@pytest.fixture()
 def setup_inventory_test(inventory_page):
     inventory_page.navigate()
     expect(inventory_page.header.get_page_title()).to_contain_text("Products")
-    yield
-    inventory_page.remove_all_items_from_cart()
+
+@pytest.fixture()
+def checkout_one_page_setup(checkout_one_page):
+    checkout_one_page.navigate()
+    expect(checkout_one_page.header.get_page_title()).to_contain_text("Checkout: Your Information")
 
 @pytest.fixture()
 def setup_cart_test(cart_page):
     cart_page.navigate()
     expect(cart_page.header.get_page_title()).to_contain_text("Your Cart")
-    # yield
-    # cart_page.remove_all_items_from_cart()
+
+@pytest.hookimpl(hookwrapper=True, tryfirst=True)
+def pytest_runtest_makereport(item):
+    """Expose setup/call/teardown reports on the test item for fixtures."""
+    outcome = yield
+    rep = outcome.get_result()
+    setattr(item, f"rep_{rep.when}", rep)
+
+@pytest.fixture(autouse=True)
+def browser_screenshot(request, browser_instance: Page):
+    """Take a screenshot when setup, call, or teardown fails."""
+    yield
+
+    rep_setup = getattr(request.node, "rep_setup", None)
+    rep_call = getattr(request.node, "rep_call", None)
+    rep_teardown = getattr(request.node, "rep_teardown", None)
+
+    phase_reports = [
+        ("setup", rep_setup),
+        ("call", rep_call),
+        ("teardown", rep_teardown),
+    ]
+    failed_phases = [
+        phase
+        for phase, rep in phase_reports
+        if rep and rep.failed and not hasattr(rep, "wasxfail")
+    ]
+    if not failed_phases:
+        return
+
+    # Create screenshots folder and unique screenshot png file name.
+    raw_name = request.node.nodeid
+    safe_name = "".join(ch if ch.isalnum() or ch in ("-", "_") else "_" for ch in raw_name)
+    phase_suffix = "__".join(failed_phases)
+    screenshots_dir = PROJECT_ROOT / "screenshots"
+    screenshots_dir.mkdir(parents=True, exist_ok=True)
+
+    # Do not fail teardown if screenshot capture is not possible.
+    try:
+        if not browser_instance.is_closed():
+            browser_instance.screenshot(
+                path=str(screenshots_dir / f"{safe_name}__{phase_suffix}.png"),
+                full_page=True,
+            )
+    except Exception:
+        pass
