@@ -7,6 +7,7 @@ from page_objects.pages.login_page import LoginPage
 from page_objects.pages.inventory_page import InventoryPage
 from page_objects.pages.cart_page import CartPage
 from page_objects.pages.checkout_one_page import CheckoutOnePage
+from page_objects.pages.checkout_two_page import CheckoutTwoPage
 from utils.common_methods import create_saucedemo_session_cookie
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -91,14 +92,24 @@ def checkout_one_page(browser_instance):
     return page
 
 @pytest.fixture()
+def checkout_two_page(browser_instance):
+    page = CheckoutTwoPage(browser_instance)
+    return page
+
+@pytest.fixture()
 def setup_inventory_test(inventory_page):
     inventory_page.navigate()
     expect(inventory_page.header.get_page_title()).to_contain_text("Products")
 
 @pytest.fixture()
-def checkout_one_page_setup(checkout_one_page):
+def setup_checkout_one_test(checkout_one_page):
     checkout_one_page.navigate()
     expect(checkout_one_page.header.get_page_title()).to_contain_text("Checkout: Your Information")
+
+@pytest.fixture()
+def setup_checkout_two_test(checkout_two_page):
+    checkout_two_page.navigate()
+    expect(checkout_two_page.header.get_page_title()).to_contain_text("Checkout: Overview")
 
 @pytest.fixture()
 def setup_cart_test(cart_page):

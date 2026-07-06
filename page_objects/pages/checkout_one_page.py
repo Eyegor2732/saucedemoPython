@@ -36,3 +36,6 @@ class CheckoutOnePage(BasePage):
     self.last_name_input.fill(last_name)
     self.postal_code_input.fill(postal_code)
     self.continue_button.click()
+
+  def navigate_cancel(self):
+    self.cancel_button.click()
