@@ -1,5 +1,3 @@
-from pathlib import Path
-import json
 import time
 import pytest
 import re
@@ -7,33 +5,23 @@ from playwright.sync_api import expect
 
 pytestmark = pytest.mark.usefixtures("setup_inventory_test")
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_FILE = BASE_DIR / "data" / "datasets" / "inventory_sorting.json"
-SESSION_COOKIE_FILE = BASE_DIR / "playwright" / ".auth" / "session-cookie.json"
-
-with open(DATA_FILE) as f:
-    test_data = json.load(f)
-    inventory_sorting_list = test_data['inventory_sorting']
-
 def test_inventory_page_basic(inventory_page):
     expect(inventory_page.header.sorting_dropdown).to_be_visible()
     expect(inventory_page.header.sorting_dropdown).to_have_value("az")
     expect(inventory_page.header.sorting_dropdown).to_contain_text("Name (A to Z)")
     expect(inventory_page.get_inventory_items).to_have_count(6)
 
-@pytest.mark.parametrize('inventory_sorting', inventory_sorting_list)
 def test_inventory_sorting(inventory_page, inventory_sorting):
-    sort_option = inventory_sorting['select']
-    by_name = inventory_sorting['isNameSort']
-    is_ascending = inventory_sorting['isAscending']
+    sort_option = inventory_sorting.select
+    by_name = inventory_sorting.isNameSort
+    is_ascending = inventory_sorting.isAscending
 
-    inventory_page.sort_and_verify_inventory(sort_option, by_name, is_ascending)
+    inventory_page.sort_and_verify_inventory(sort_option, by_name, is_ascending) 
 
-@pytest.mark.parametrize('inventory_sorting', inventory_sorting_list)
-def test_product_information_remains_consistent_after_sorting(inventory_page, inventory_sorting):
-    sort_option = inventory_sorting['select']
-    by_name = inventory_sorting['isNameSort']
-    is_ascending = inventory_sorting['isAscending']
+def test_product_information_remains_consistent_after_sorting(inventory_page, inventory_sorting_dict):
+    sort_option = inventory_sorting_dict.select
+    by_name = inventory_sorting_dict.isNameSort
+    is_ascending = inventory_sorting_dict.isAscending
 
     name_description_dict_before_sorting = inventory_page.get_dict_name_description()
     name_price_dict_before_sorting = inventory_page.get_dict_name_price()

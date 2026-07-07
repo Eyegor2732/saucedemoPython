@@ -1,7 +1,7 @@
 import time
 import re
 
-def create_saucedemo_session_cookie(context, expires_in_seconds=600, username="standard_user"):
+def create_saucedemo_session_cookie(context, expires_in_seconds=600, username="standard_user") -> None:
     future_expiration_time = int(time.time()) + expires_in_seconds
 
     context.add_cookies([{
